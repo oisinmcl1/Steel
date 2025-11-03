@@ -1,0 +1,13 @@
+astroid==4.0.1
+dill==0.4.0
+isort==7.0.0
+mccabe==0.7.0
+numpy==2.3.4
+pandas==2.3.3
+platformdirs==4.5.0
+pylint==4.0.2
+python-dateutil==2.9.0.post0
+pytz==2025.2
+six==1.17.0
+tomlkit==0.13.3
+tzdata==2025.2
