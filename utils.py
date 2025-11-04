@@ -7,6 +7,7 @@ Oisin Mc Laughlin
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
+from sklearn.metrics import mean_squared_error, r2_score
 
 steel_data = pd.read_csv('steel.csv')
 
@@ -42,3 +43,18 @@ def visualise_data():
     plt.suptitle('Steel Data')
     plt.tight_layout()
     plt.show()
+
+
+def evaluate_model(y_true, y_pred):
+    """
+    Evaluates the model using Mean Squared Error and R^2 Score.
+    :param y_true:
+    :param y_pred:
+    :return: mse, r2
+    """
+    # Domain specific
+    mse = mean_squared_error(y_true, y_pred)
+    # Domain independent
+    r2 = r2_score(y_true, y_pred)
+
+    return mse, r2
