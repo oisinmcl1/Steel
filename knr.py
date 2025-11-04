@@ -120,3 +120,5 @@ def tuned_knr(x, y, kf):
 
         print("Train MSE:", round(train_mse, 4), "Train R2:", round(train_r2, 4))
         print("Test MSE:", round(test_mse, 4), "Test R2:", round(test_r2, 4))
+
+    return tuned_train_mse, tuned_test_mse, tuned_train_r2, tuned_test_r2
