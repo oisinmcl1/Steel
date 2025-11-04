@@ -11,8 +11,6 @@ def main():
     Main function to execute data retrieval and visualization.
     :return: None
     """
-    get_data()
-    visualise_data()
 
 if __name__ == "__main__":
     main()

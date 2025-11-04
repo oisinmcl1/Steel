@@ -9,15 +9,14 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
 from sklearn.metrics import mean_squared_error, r2_score
 
-steel_data = pd.read_csv('steel.csv')
-
-
 def get_data():
     """
+    Gets the steel data from steel.csv
     Splits the steel data into features and target variable.
     Sets up 10 fold cross validation.
     :return: x, y, kf
     """
+    steel_data = pd.read_csv('steel.csv')
     print("Data loaded successfully.")
     print("Data Shape:", steel_data.shape)
 
@@ -29,14 +28,15 @@ def get_data():
     print("Target Shape:", y.shape)
 
     # Setting up 10 fold cross validation and shuffling the data
-    kf = KFold(n_splits=10, shuffle=True, random_state=1)
+    kf = KFold(n_splits=10, shuffle=True, random_state=42)
 
-    return x, y, kf
+    return steel_data, x, y, kf
 
 
-def visualise_data():
+def visualise_data(steel_data):
     """
     Visualises the steel data.
+    :param steel_data: dataframe read from steel.csv
     :return:
     """
     steel_data.hist(figsize=(12, 10))
@@ -48,8 +48,8 @@ def visualise_data():
 def evaluate_model(y_true, y_pred):
     """
     Evaluates the model using Mean Squared Error and R^2 Score.
-    :param y_true:
-    :param y_pred:
+    :param y_true: true values
+    :param y_pred: predicted values
     :return: mse, r2
     """
     # Domain specific
