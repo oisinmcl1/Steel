@@ -5,7 +5,7 @@ Oisin Mc Laughlin
 """
 
 from utils import get_data, visualise_data
-import knr
+from knr import default_knr, tuned_knr
 
 def main():
     """
@@ -14,7 +14,8 @@ def main():
     """
     # Get data
     steel_data, x, y, kf = get_data()
-    knr.knr(x, y, kf)
+    default_knr(x, y, kf)
+    tuned_knr(x, y, kf)
 
 if __name__ == "__main__":
     main()
