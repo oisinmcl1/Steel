@@ -4,11 +4,15 @@ Oisin Mc Laughlin
 22441106
 """
 
-from utils import load_data
+from utils import get_data, visualise_data
 
 def main():
-    data = load_data()
-    print(data.head())
+    """
+    Main function to execute data retrieval and visualization.
+    :return: None
+    """
+    get_data()
+    visualise_data()
 
 if __name__ == "__main__":
     main()
