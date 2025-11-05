@@ -21,7 +21,6 @@ def default_knr(x, y, kf):
     """
     print("\nDefault K-Nearest Regressor Results:")
 
-    # Setup default KNN model and scoring metrics
     default_model = KNeighborsRegressor()
 
     # Run model with cross validation using default params
