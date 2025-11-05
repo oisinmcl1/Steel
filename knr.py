@@ -4,69 +4,60 @@ Oisin Mc Laughlin
 22441106
 """
 from sklearn.neighbors import KNeighborsRegressor
-from sklearn.model_selection import GridSearchCV
-from utils import evaluate_model
+from sklearn.model_selection import GridSearchCV, cross_validate
+
+scoring = [
+    'neg_mean_squared_error',
+    'r2'
+]
 
 def default_knr(x, y, kf):
     """
-    :param x:
-    :param y:
-    :param kf:
-    :return:
+    Tests default KNR model with cross validation.
+    :param x: Features
+    :param y: Target
+    :param kf: K-Fold Cross Val obj
+    :return: train_mse, test_mse, train_r2, test_r2
     """
     print("\nDefault K-Nearest Regressor Results:")
 
-    default_train_mse = []
-    default_test_mse = []
-    default_train_r2 = []
-    default_test_r2 = []
+    # Setup default KNN model and scoring metrics
+    default_model = KNeighborsRegressor()
 
-    # Iterate through each fold
-    for fold, (train_index, test_index) in enumerate(kf.split(x)):
-        print("Fold:", fold)
+    # Run model with cross validation using default params
+    results = cross_validate(
+        estimator=default_model,
+        X=x,
+        y=y,
+        scoring=scoring,
+        cv=kf,
+        verbose=1,
+        return_train_score=True
+    )
 
-        # Split data into train and test for this fold
-        x_train = x.iloc[train_index]
-        x_test = x.iloc[test_index]
-        y_train = y.iloc[train_index]
-        y_test = y.iloc[test_index]
+    # No regular mse for cross val so take negative value
+    train_mse = -results['train_neg_mean_squared_error']
+    test_mse = -results['test_neg_mean_squared_error']
+    train_r2 = results['train_r2']
+    test_r2 = results['test_r2']
 
-        # Train default KNN model
-        default_model = KNeighborsRegressor()
-        default_model.fit(x_train, y_train)
+    print("Train MSE:", round(train_mse.mean(), 4))
+    print("Test MSE:", round(test_mse.mean(), 4))
+    print("Train R2:", round(train_r2.mean(), 4))
+    print("Test R2:", round(test_r2.mean(), 4))
 
-        # Make predictions
-        train_pred = default_model.predict(x_train)
-        test_pred = default_model.predict(x_test)
-
-        # Evaluate model
-        train_mse, train_r2 = evaluate_model(y_train, train_pred)
-        test_mse, test_r2 = evaluate_model(y_test, test_pred)
-
-        # Store results
-        default_train_mse.append(train_mse)
-        default_test_mse.append(test_mse)
-        default_train_r2.append(train_r2)
-        default_test_r2.append(test_r2)
-
-        print("Train MSE:", round(train_mse, 4), "Train R2:", round(train_r2, 4))
-        print("Test MSE:", round(test_mse, 4), "Test R2:", round(test_r2, 4))
-
-    return default_train_mse, default_test_mse, default_train_r2, default_test_r2
+    return train_mse, test_mse, train_r2, test_r2
 
 
 def tuned_knr(x, y, kf):
     """
-    :param x:
-    :param y:
-    :param kf:
-    :return:
+    Tests tuned KNR model using gridsearch with cross validation.
+    :param x: Features
+    :param y: Target
+    :param kf: K-Fold Cross Val obj
+    :return: train_mse, test_mse, train_r2, test_r2
     """
     print("\nTuned K-Nearest Regressor Results:")
-    tuned_train_mse = []
-    tuned_test_mse = []
-    tuned_train_r2 = []
-    tuned_test_r2 = []
 
     param_grid = {
         'n_neighbors': range(1, 21, 2),
@@ -80,7 +71,6 @@ def tuned_knr(x, y, kf):
         estimator=gridsearch_model,
         param_grid=param_grid,
         scoring='r2',
-        n_jobs=-1,
         cv=kf,
         verbose=1
     )
@@ -89,36 +79,30 @@ def tuned_knr(x, y, kf):
     grid_search.fit(x, y)
 
     print("Best Hyperparameters:", grid_search.best_params_)
-    print("Best Score:", round(grid_search.best_score_, 4))
+    print("Best R2 Score:", round(grid_search.best_score_, 4))
 
-    for fold, (train_index, test_index) in enumerate(kf.split(x)):
-        print("Fold:", fold)
+    # Evaluate tuned model with cross validation
+    tuned_model = grid_search.best_estimator_
 
-        # Split data into train and test for this fold
-        x_train = x.iloc[train_index]
-        x_test = x.iloc[test_index]
-        y_train = y.iloc[train_index]
-        y_test = y.iloc[test_index]
+    results = cross_validate(
+        estimator=tuned_model,
+        X=x,
+        y=y,
+        scoring=scoring,
+        cv=kf,
+        verbose=1,
+        return_train_score=True
+    )
 
-        # Train default KNN model
-        tuned_model = KNeighborsRegressor(**grid_search.best_params_)
-        tuned_model.fit(x_train, y_train)
+    # No regular mse for cross val so take negative value
+    train_mse = -results['train_neg_mean_squared_error']
+    test_mse = -results['test_neg_mean_squared_error']
+    train_r2 = results['train_r2']
+    test_r2 = results['test_r2']
 
-        # Make predictions
-        train_pred = tuned_model.predict(x_train)
-        test_pred = tuned_model.predict(x_test)
+    print("Train MSE:", round(train_mse.mean(), 4))
+    print("Test MSE:", round(test_mse.mean(), 4))
+    print("Train R2:", round(train_r2.mean(), 4))
+    print("Test R2:", round(test_r2.mean(), 4))
 
-        # Evaluate model
-        train_mse, train_r2 = evaluate_model(y_train, train_pred)
-        test_mse, test_r2 = evaluate_model(y_test, test_pred)
-
-        # Store results
-        tuned_train_mse.append(train_mse)
-        tuned_test_mse.append(test_mse)
-        tuned_train_r2.append(train_r2)
-        tuned_test_r2.append(test_r2)
-
-        print("Train MSE:", round(train_mse, 4), "Train R2:", round(train_r2, 4))
-        print("Test MSE:", round(test_mse, 4), "Test R2:", round(test_r2, 4))
-
-    return tuned_train_mse, tuned_test_mse, tuned_train_r2, tuned_test_r2
+    return train_mse, test_mse, train_r2, test_r2
