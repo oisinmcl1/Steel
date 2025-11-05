@@ -48,7 +48,12 @@ def visualise_data(steel_data, scaled_data):
     :return:
     """
     steel_data.hist(figsize=(12, 10))
-    plt.suptitle('Steel Data')
+    plt.suptitle('Steel Data Before Scaling')
+    plt.tight_layout()
+    plt.show()
+
+    scaled_data.hist(figsize=(12, 10))
+    plt.suptitle('Scaled Steel After Scaling')
     plt.tight_layout()
     plt.show()
 
