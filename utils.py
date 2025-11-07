@@ -5,6 +5,7 @@ Oisin Mc Laughlin
 """
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.model_selection import KFold
 from sklearn.preprocessing import StandardScaler
 
@@ -41,7 +42,8 @@ def get_data():
 def visualise_data(steel_data, scaled_data):
     """
     Visualises the steel data using histograms.
-    Also visualises data before and after scaling using box plots.
+    Visualises data before and after scaling using box plots.
+    Visualises data with correlation matrix with heatmap.
     :param steel_data: dataframe read from steel.csv
     :param scaled_data: dataframe of scaled steel data
     :return:
@@ -65,5 +67,12 @@ def visualise_data(steel_data, scaled_data):
     scaled_data.boxplot(figsize=(12, 10))
     plt.suptitle('Steel Data After Scaling')
     plt.xticks(rotation=90)
+    plt.tight_layout()
+    plt.show()
+
+    corr = steel_data.corr()
+    plt.figure(figsize=(12, 10))
+    plt.title('Correlation Matrix of Steel Data')
+    sns.heatmap(data=corr, annot=True)
     plt.tight_layout()
     plt.show()
