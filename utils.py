@@ -6,7 +6,6 @@ Oisin Mc Laughlin
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import KFold
-from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.preprocessing import StandardScaler
 
 def get_data():
@@ -68,18 +67,3 @@ def visualise_data(steel_data, scaled_data):
     plt.xticks(rotation=90)
     plt.tight_layout()
     plt.show()
-
-
-def evaluate_model(y_true, y_pred):
-    """
-    Evaluates the model using Mean Squared Error and R^2 Score.
-    :param y_true: true values
-    :param y_pred: predicted values
-    :return: mse, r2
-    """
-    # Domain specific
-    mse = mean_squared_error(y_true, y_pred)
-    # Domain independent
-    r2 = r2_score(y_true, y_pred)
-
-    return mse, r2

@@ -56,11 +56,11 @@ def tuned_svr(x, y, kf):
     :param kf: K-Fold Cross Val obj
     :return: train_mse, test_mse, train_r2, test_r2
     """
-    print("\nTuned K-Nearest Regressor Results:")
+    print("\nTuned Support Vector Regressor Results:")
 
     param_grid = {
         'kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
-        'C': [0.1, 1, 10, 100]
+        'C': [0.1, 1, 10, 100, 1000]
     }
 
     gridsearch_model = SVR()
