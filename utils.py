@@ -14,6 +14,7 @@ def get_data():
     """
     Gets the steel data from steel.csv
     Scales the data using StandardScaler.
+    Eliminates features that have low correlation with tensile_strength.
     Splits the steel data into features and target variable.
     Sets up 10-fold cross validation.
     :return: steel_data, scaled_data, x, y, kf
@@ -27,9 +28,18 @@ def get_data():
     scaler = StandardScaler()
     scaled_data = pd.DataFrame(scaler.fit_transform(steel_data), columns=steel_data.columns)
 
+    # Eliminate features with correlation less than 0.2 with tensile_strength
+    corr = scaled_data.corr()
+    # Abs value to consider negative correlation too
+    target_corr = corr['tensile_strength'].abs()
+    selected_features = target_corr[target_corr > 0.2].index.tolist()
+    print("Number of features after elimination:", len(selected_features) - 1)
+    # Convert to dataframe
+    selected_features = scaled_data[selected_features]
+
     # Separating features and target variable
-    x = scaled_data.drop('tensile_strength', axis=1)
-    y = scaled_data['tensile_strength']
+    x = selected_features.drop('tensile_strength', axis=1)
+    y = selected_features['tensile_strength']
 
     print("Features Shape:", x.shape)
     print("Target Shape:", y.shape)
