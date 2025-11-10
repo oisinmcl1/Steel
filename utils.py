@@ -81,39 +81,32 @@ def visualise_data(steel_data, scaled_data):
     plt.show()
 
 
-def compare_models(model_x_name, model_y_name,
-                   model_x_train_mse, model_x_test_mse, model_x_train_r2, model_x_test_r2,
-                   model_y_train_mse, model_y_test_mse, model_y_train_r2, model_y_test_r2):
+def compare_models(model_x_metrics, model_y_metrics):
     """
     Compares two models using a simple bar chart.
-    :param model_x_name: Name of first model
-    :param model_y_name: Name of second model
-    :param model_x_train_mse: Train MSE array for model x
-    :param model_x_test_mse: Test MSE array for model x
-    :param model_x_train_r2: Train R2 array for model x
-    :param model_x_test_r2: Test R2 array for model x
-    :param model_y_train_mse: Train MSE array for model y
-    :param model_y_test_mse: Test MSE array for model y
-    :param model_y_train_r2: Train R2 array for model y
-    :param model_y_test_r2: Test R2 array for model y
+    :param model_x_metrics: Dictionary with model metrics
+    :param model_y_metrics: Dictionary with model metrics
     :return:
     """
-    print("\nVisualising Comparison between" + model_x_name + "and" + model_y_name)
+    model_x_name = model_x_metrics['model_name']
+    model_y_name = model_y_metrics['model_name']
+
+    print("\nVisualising Comparison between " + model_x_name + " and " + model_y_name)
 
     labels = ['Train MSE', 'Test MSE', 'Train R2', 'Test R2']
 
     model_x_scores = [
-        model_x_train_mse.mean(),
-        model_x_test_mse.mean(),
-        model_x_train_r2.mean(),
-        model_x_test_r2.mean()
+        model_x_metrics['train_mse'].mean(),
+        model_x_metrics['test_mse'].mean(),
+        model_x_metrics['train_r2'].mean(),
+        model_x_metrics['test_r2'].mean()
     ]
 
     model_y_scores = [
-        model_y_train_mse.mean(),
-        model_y_test_mse.mean(),
-        model_y_train_r2.mean(),
-        model_y_test_r2.mean()
+        model_y_metrics['train_mse'].mean(),
+        model_y_metrics['test_mse'].mean(),
+        model_y_metrics['train_r2'].mean(),
+        model_y_metrics['test_r2'].mean()
     ]
 
     x = np.arange(4)
