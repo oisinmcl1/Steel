@@ -132,3 +132,22 @@ def compare_models(model_x_metrics, model_y_metrics):
     plt.legend()
     plt.tight_layout()
     plt.show()
+
+
+def export_results_to_csv(model_metrics):
+    """
+    Exports model results to a CSV file.
+    :param model_metrics: Dictionary with model metrics
+    :return:
+    """
+    model_name = model_metrics['model_name']
+    results = {
+        'Train MSE': model_metrics['train_mse'],
+        'Test MSE': model_metrics['test_mse'],
+        'Train R2': model_metrics['train_r2'],
+        'Test R2': model_metrics['test_r2']
+    }
+    results_df = pd.DataFrame(results)
+
+    results_df.to_csv(model_name + '_results.csv', index=False)
+    print("\nResults exported to " + model_name + "_results.csv")
