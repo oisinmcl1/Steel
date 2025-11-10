@@ -1,9 +1,9 @@
 """
-K-NEAREST REGRESSOR
+SUPPORT VECTOR REGRESSION
 Oisin Mc Laughlin
 22441106
 """
-from sklearn.neighbors import KNeighborsRegressor
+from sklearn.svm import SVR
 from sklearn.model_selection import GridSearchCV, cross_validate
 
 scoring = [
@@ -11,17 +11,17 @@ scoring = [
     'r2'
 ]
 
-def default_knr(x, y, kf):
+def default_svr(x, y, kf):
     """
-    Tests default KNR model with cross validation.
+    Tests default SVR model with cross validation.
     :param x: Features
     :param y: Target
     :param kf: K-Fold Cross Val obj
     :return: train_mse, test_mse, train_r2, test_r2
     """
-    print("\nDefault K-Nearest Regressor Results:")
+    print("\nDefault Support Vector Regressor Results:")
 
-    default_model = KNeighborsRegressor()
+    default_model = SVR()
 
     # Run model with cross validation using default params
     results = cross_validate(
@@ -48,22 +48,22 @@ def default_knr(x, y, kf):
     return train_mse, test_mse, train_r2, test_r2
 
 
-def tuned_knr(x, y, kf):
+def tuned_svr(x, y, kf):
     """
-    Tests tuned KNR model using gridsearch with cross validation.
+    Tests tuned SVR model using gridsearch with cross validation.
     :param x: Features
     :param y: Target
     :param kf: K-Fold Cross Val obj
     :return: train_mse, test_mse, train_r2, test_r2
     """
-    print("\nTuned K-Nearest Regressor Results:")
+    print("\nTuned Support Vector Regressor Results:")
 
     param_grid = {
-        'n_neighbors': range(1, 21, 2),
-        'weights': ['uniform', 'distance']
+        'kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
+        'C': [0.1, 1, 10, 100, 1000]
     }
 
-    gridsearch_model = KNeighborsRegressor()
+    gridsearch_model = SVR()
 
     # Using gscv to find best hyperparams with r2 scoring and our kf
     grid_search = GridSearchCV(
@@ -90,7 +90,7 @@ def tuned_knr(x, y, kf):
         scoring=scoring,
         cv=kf,
         verbose=1,
-        return_train_score=True
+        return_train_score=True,
     )
 
     # No regular mse for cross val so take negative value
