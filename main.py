@@ -68,6 +68,7 @@ def main():
     # Compare models
     compare_models(default_knr_metrics, tuned_knr_metrics)
     compare_models(default_svr_metrics, tuned_svr_metrics)
+    compare_models(default_knr_metrics, default_svr_metrics)
     compare_models(tuned_knr_metrics, tuned_svr_metrics)
 
 if __name__ == "__main__":
